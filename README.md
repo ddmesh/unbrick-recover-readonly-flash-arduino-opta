@@ -1,4 +1,4 @@
-# unbrick-recover-arduino-opta
+# Recover from readonly NOR flash issue -> get write access again
 
 **Author**: Stephan Enderlein \
 **License**: BSD-3-Clause
