@@ -282,11 +282,12 @@ void setup()
     pinMode(QSPI_SO2, INPUT);
 
     //print current status register+check if WEL can be set
-    printf("---- checking WEL bit ----\n");
+    printf("---- current status ----\n");
     readStatusRegister();
 
     // tell qspi that I want to write data. nor flash needs this to avoid accedential writes to
     // registers or memory during booting a device where signals on data/control lines are not determined.
+    printf("---- write enable + checking WEL bit ----\n");
     _writeEnable();
     readStatusRegister();
 
@@ -295,7 +296,7 @@ void setup()
     resetFlashProtection();
 
     //verify
-    printf("---- verify ----\n");
+    printf("---- verify status register ----\n");
     readStatusRegister();
 
     printf("---end---\n");
