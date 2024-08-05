@@ -10,7 +10,7 @@ drivers or mbed-os.
 The external flash (build in the device and externally connected to the MCU STM32H7) is used as a block device carrying partitions and
 filesystems.
 
-When this NOR flash is protected, mostly hardare protection is
+When this NOR flash is protected, mostly hardware protection is
 enabled without any reason. Then the file systen can only be read.
 
 Any attempt to write, reformat, partitioning will not return an error. It is simply not working and ignores any write command to
