@@ -34,14 +34,14 @@ License: BSD-3-Clause
 #include <Arduino.h>
 #include <QSPI.h>
 
-// this macro device two function that are called by mbed::os to redirect stdout (which printf uses)
+// this macro defines two function that are called by mbed::os to redirect stdout 
 // to serial "stream"
-// Allowing using printf.
+// Allowing using printf to serial.
 #include <macros.h>
 REDIRECT_STDOUT_TO(Serial);
 
 
-// devine QSPI pins. MBED_CONF_QSPIF_QSPI_Ixxx are defined by selected device (e.g. OPTA)
+// define QSPI pins. MBED_CONF_QSPIF_QSPI_Ixxx are defined by selected device (e.g. OPTA)
 PinName io0 = MBED_CONF_QSPIF_QSPI_IO0;
 PinName io1 = MBED_CONF_QSPIF_QSPI_IO1;
 PinName io2 = MBED_CONF_QSPIF_QSPI_IO2;
@@ -210,7 +210,7 @@ void readStatusRegister()
 }
 
 // only possible if no HW protection is truned on.
-// in case of Finder OPTA, this happens accedentially and is a bug
+// in case of Finder OPTA, this happens accidentally and is a bug
 // within their driver or mbed::OS port/libs.
 // you have to disable HW protection first. (which is possible)
 void resetFlashProtection()
@@ -256,7 +256,7 @@ void setup()
     // Two of those pins are used for either transfering data or as HW protection PIN.
     // This depends on the speed mode.
     //
-    // The Opta device has connected all needed data lines to STM32H7 mcu.
+    // The Opta device has all needed data lines connected to STM32H7 mcu.
     // Somehow Arduino or Driver code does set the important flag accedentially. If then
     // the HW Pin gets low (somehow) the flash hardware protection gets activated permantently.
     // This HW protection can only be reset when you have access to the HW protection pin.
@@ -265,11 +265,12 @@ void setup()
     // But there is a much simpler way todo it.
     //
     // The trick:
-    //   As I know that all data lines are connected to MCU (stm32h7) and this MCU allows to
-    //   move internal functions to different pins. Function are something like I2C,USB,UARTs,PWMs
-    //   AND ALSO QSPI.
+    //   As I know that all data lines are connected to MCU (stm32h7) and this MCU allows to 
+    //   move internal functions like I2C,USB,UARTs,PWMs to different pins.
+    //   One of those functions are also QSPI.
+    //
     //   With this in background, after you have initialized QSPI I redefine the data pin which
-    //   also controls hardware protection as an normal GPIO input pin.
+    //   also controls hardware protection to an normal GPIO input pin.
     //   This is possible, because I only use QSPI commands that are available for QSPI_CFG_BUS_SINGLE.
     //
     // Result: the CPIO pin gets into high-z state (input). The QSPI flash has internally a pull up
@@ -277,7 +278,7 @@ void setup()
     //
     // The next steps are easy:
     //   - enable writing to flash (WEL bit)
-    //   - reset all protection bits.
+    //   - reset all protection bits within the flash chip
 
     pinMode(QSPI_SO2, INPUT);
 
@@ -286,7 +287,7 @@ void setup()
     readStatusRegister();
 
     // tell qspi that I want to write data. nor flash needs this to avoid accedential writes to
-    // registers or memory during booting a device where signals on data/control lines are not determined.
+    // flash registers or memory during booting a device where signals on data/control lines are not determined.
     printf("---- write enable + checking WEL bit ----\n");
     _writeEnable();
     readStatusRegister();
